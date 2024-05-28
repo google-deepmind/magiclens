@@ -1,21 +1,74 @@
 # magiclens
 
-TODO(b/342634983): Add a description for your new project, explain what is
-being released here, etc... Additional, the following sections are normally
-expected for all releases. Feel free to add additional sections if appropriate
-for your project.
+This repo contains implementation of MagicLens. The code here uses Jax and Flax.
+Note that the current implementation does not yet support training.
 
-## Installation
 
-Write instructions for how the user should install your code. The instructions
-should ideally be valid when copy-pasted. You can combine this with the Usage
-section if there's no separate installation step.
+## Abstract
 
-## Usage
+We introduce MagicLens, a series of self-supervised image retrieval models that support
+open-ended instructions. The core thesis of MagicLens is that text
+instructions can enable retrieving images with
+richer relations beyond visual similarity. MagicLens is built on a
+key novel insight: image pairs that naturally occur
+on the same web pages contain a wide range of implicit relations (e.g., inside view of), and we
+can bring those implicit relations explicit by synthesizing instructions via large multimodal models (LMMs) and large language models (LLMs).
+Trained on 36.7M (query image, instruction, target image) triplets with rich semantic relations
+mined from the web, MagicLens achieves comparable or better results on eight benchmarks of
+various image retrieval tasks than prior state-ofthe-art (SOTA) methods. Remarkably, it outperforms previous SOTA but with a 50× smaller
+model size on multiple benchmarks. Additional
+human analyses on a 1.4M-image unseen corpus
+further demonstrate the diversity of search intents
+supported by MagicLens.
 
-Write example usage of your code. The instructions should ideally be valid when
-copy-pasted, and will be used by your technical reviewer to verify that your
-package functions correctly.
+## Setup
+```
+conda create --name magic_lens python=3.9
+conda activate magic_lens
+git clone https://github.com/google-research/scenic.git
+cd scenic
+pip install .
+pip install -r scenic/projects/baselines/clip/requirements.txt
+# you may need to install corresponding GPU version of jax following https://jax.readthedocs.io/en/latest/installation.html
+# e.g.,
+# # CUDA 12 installation
+# Note: wheels only available on linux.
+# pip install --upgrade "jax[cuda12_pip]" -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
+
+# # CUDA 11 installation
+# Note: wheels only available on linux.
+# pip install --upgrade "jax[cuda11_pip]" -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
+```
+
+### Model Download (TODO)
+Download model via:
+```
+mkdir MagicLens_LARGE_MODEL_PATH
+gsutil cp -R gs://gresearch/magiclens/models MagicLens_MODEL_PATH
+```
+
+### Data Preparation
+Please follow each dataset folder in `./data`. Currently we have successfully tested FIQ and CIRCO:
+
+## Inference
+```
+python inference.py \
+--model_size large \
+--model_path ${MagicLens_MODEL_PATH}/magic_lens_clip_large.pkl \
+--dataset circo
+
+```
+
+Due to the weight conversion, the performance may be slightly different:
+
+In `CIRCO`
+| Model | map@5 | map@10 | map@25 | map@50 |
+|----------|----------|----------|----------|----------|
+| Prior SOTA | 26.8 | 27.6 | 30.0 | 31.0 |
+| Base (original) | 23.1 | 23.8 | 25.8 | 26.7 |
+| Base (converted) | 22.3 | 23.2 | 25.0 | 26.0 |
+| Large (original) | 29.6 | 30.8 | 33.4 | 34.4 |
+| Large (converted) | 29.5 | 30.8 | 33.2 | 34.3 |
 
 ## Citing this work
 
