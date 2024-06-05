@@ -2,7 +2,7 @@
 
 This repo contains implementation of MagicLens. The code here uses Jax and Flax.
 Note that the current implementation does not yet support training.
-
+Refer to the [website](https://open-vision-language.github.io/MagicLens/) for dataset examples.
 
 ## Abstract
 
@@ -15,11 +15,12 @@ on the same web pages contain a wide range of implicit relations (e.g., inside v
 can bring those implicit relations explicit by synthesizing instructions via large multimodal models (LMMs) and large language models (LLMs).
 Trained on 36.7M (query image, instruction, target image) triplets with rich semantic relations
 mined from the web, MagicLens achieves comparable or better results on eight benchmarks of
-various image retrieval tasks than prior state-ofthe-art (SOTA) methods. Remarkably, it outperforms previous SOTA but with a 50× smaller
+various image retrieval tasks than prior state-of-the-art (SOTA) methods. Remarkably, it outperforms previous SOTA but with a 50× smaller
 model size on multiple benchmarks. Additional
 human analyses on a 1.4M-image unseen corpus
 further demonstrate the diversity of search intents
 supported by MagicLens.
+![Intro image](https://open-vision-language.github.io/MagicLens/static/images/magiclens_overview.png)
 
 ## Setup
 ```
@@ -75,10 +76,12 @@ In `CIRCO`
 Add citation details here, usually a pastable BibTeX snippet:
 
 ```latex
-@article{publicationname,
-      title={Publication Name},
-      author={Author One and Author Two and Author Three},
-      year={2024},
+@inproceedings{zhang2024magiclens,
+  title={MagicLens: Self-Supervised Image Retrieval with Open-Ended Instructions},
+  author={Zhang, Kai and Luan, Yi and Hu, Hexiang and Lee, Kenton and Qiao, Siyuan and Chen, Wenhu and Su, Yu and Chang, Ming-Wei},
+  booktitle={The Forty-first International Conference on Machine Learning (ICML)},
+  year={2024},
+  pages={to appear}
 }
 ```
 
