@@ -41,11 +41,12 @@ pip install -r scenic/projects/baselines/clip/requirements.txt
 # pip install --upgrade "jax[cuda11_pip]" -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
 ```
 
-### Model Download (TODO)
+### Model Download
 Download model via:
 ```
-mkdir MagicLens_LARGE_MODEL_PATH
-gsutil cp -R gs://gresearch/magiclens/models MagicLens_MODEL_PATH
+cd .. # in main folder `magiclens`
+# you may need to use `gcloud auth login` for access, any gmail account should work.
+gsutil cp -R gs://gresearch/magiclens/models ./
 ```
 
 ### Data Preparation
@@ -55,7 +56,7 @@ Please follow each dataset folder in `./data`. Currently we have successfully te
 ```
 python inference.py \
 --model_size large \
---model_path ${MagicLens_MODEL_PATH}/magic_lens_clip_large.pkl \
+--model_path ./models/magic_lens_clip_large.pkl \
 --dataset circo
 
 ```
