@@ -1,4 +1,4 @@
-# magiclens
+# MagicLens
 
 This repo contains implementation of MagicLens. The code here uses Jax and Flax.
 Note that the current implementation does not yet support training.
