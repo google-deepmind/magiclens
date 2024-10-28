@@ -52,7 +52,7 @@ gsutil cp -R gs://gresearch/magiclens/models ./
 OR via [google drive](https://drive.google.com/drive/folders/1MXszMqIIh-yV7cYxWUxP7uHs9gfuTT3u)
 
 ### Data Preparation
-Please follow each dataset folder in `./data`. Currently we have successfully tested FIQ and CIRCO:
+Please follow each dataset folder in `./data`. Currently we have successfully tested FIQ, CIRCO, and DTIN:
 
 ## Inference
 ```

@@ -99,13 +99,13 @@ tar -xf ILSVRC2012_img_val.tar
 sh ./extract_ILSVRC.sh
 
 The file structure should look like this (w/o showing train/test.json):
-```
- dtin
+
+```bash
+├── dtin
     ├── imagenet-r ## unzipped imagenet-r directories containing images. This folder should contain subfolders.
             └──n01443537
                   .
                   . 
-
     ├── imgnet_real_query.txt
     ├── imgnet_targets.txt
     └── real ## imagenet validation directories containing images. This folder should contain subfolders.
