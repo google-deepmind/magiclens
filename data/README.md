@@ -73,3 +73,44 @@ The file structure should look like this (w/o showing train/test.json):
     ...
 ```
 
+
+
+## Domain-Transfer ImageNet
+```
+mkdir dtin
+cd dtin
+
+# get labels and queries from Pic2Word
+wget https://raw.githubusercontent.com/google-research/composed_image_retrieval/refs/heads/main/data/imgnet/imgnet_real_query.txt
+wget https://raw.githubusercontent.com/google-research/composed_image_retrieval/refs/heads/main/data/imgnet/imgnet_targets.txt
+```
+
+### Download DTIN
+Donload ImageNet-R dataset following [ImageNet R](https://github.com/hendrycks/imagenet-r?tab=readme-ov-file)
+Download ImageNet Validation dataset following [ImageNet Real](https://github.com/hendrycks/imagenet-real?tab=readme-ov-file)
+
+Uncompress `imagenet-r.tar` and `imagenet-real.tar` accordingly.
+```
+wget https://people.eecs.berkeley.edu/\~hendrycks/imagenet-r.tar
+tar -xf imagenet-r.tar
+wget https://image-net.org/data/ILSVRC/2012/ILSVRC2012_img_val.tar --no-check-certificate
+
+tar -xf ILSVRC2012_img_val.tar
+sh ./extract_ILSVRC.sh
+
+The file structure should look like this (w/o showing train/test.json):
+```
+ dtin
+    ├── imagenet-r ## unzipped imagenet-r directories containing images. This folder should contain subfolders.
+            └──n01443537
+                  .
+                  . 
+
+    ├── imgnet_real_query.txt
+    ├── imgnet_targets.txt
+    └── real ## imagenet validation directories containing images. This folder should contain subfolders.
+        └──n01440764
+                  .
+                  . 
+```
+

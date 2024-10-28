@@ -199,3 +199,71 @@ def build_circo_dataset(dataset_name: str, tokenizer: Any) -> Dataset:
                 progress.update(1)
 
     return eval_dataset
+
+
+# TODO test
+def build_dtin_dataset(dataset_name: str, tokenizer: Any) -> Dataset:
+    eval_dataset = Dataset(dataset_name)
+    all_domains = ['cartoon', 'origami', 'toy', 'sculpture']   # only evaluate on one domain per run
+    target_domain = dataset_name.split("-")[1]
+    query_entries = open("./data/dtin/imgnet_real_query.txt").readlines()
+    index_entries = open("./data/dtin/imgnet_targets.txt").readlines()
+
+    # debug
+    # query_entries = query_entries[:10]
+    # index_entries = index_entries[:10]
+    null_tokens = tokenizer("")  # used for index example
+    null_tokens = np.array(null_tokens)
+
+    query_text_template = "find this object in {}"
+    # parse queries and targets
+
+    def process_index_example(index_entry):
+        iimage_path, iid = index_entry.split()
+        iimage_path = "/".join(iimage_path.split("/")[1:])  # remove the first 'imgnet/' as we are using dtin now
+        iimage_path = os.path.join("./data/dtin/", iimage_path)
+
+        ima = process_img(iimage_path, 224)
+        return IndexExample(iid=int(iid), iimage=ima, itokens=null_tokens)
+
+    def process_query(query_entry, domain_id, domain):
+        qimg_path, class_id = query_entry.split()
+        qimg_path = "/".join(qimg_path.split("/")[1:])  # remove the first 'imgnet/' as we are using dtin now
+        qimage_path = os.path.join("./data/dtin/", qimg_path)
+        target_iid = domain_id * 1000 + int(class_id)
+        qid = qimg_path.split("/")[-1]
+
+        qtext = query_text_template.format(domain)
+        qimage = process_img(qimage_path, 224)
+        qtokens = np.array(tokenizer(qtext))
+        return QueryExample(qid=qid + "-class-" + class_id + "-to-" + domain, qtokens=qtokens, qimage=qimage, target_iid=target_iid, retrieved_iids=[], retrieved_scores=[])
+
+    
+    domain_id = all_domains.index(target_domain)
+    with ThreadPoolExecutor() as executor:
+        print("Preparing query examples...")
+        query_futures = {executor.submit(process_query, query_entry, domain_id, target_domain): (query_entry, domain_id, target_domain) for query_entry in query_entries}
+
+        with tqdm(total=len(query_entries), desc="Query examples") as progress:
+            for future in as_completed(query_futures):
+                q_example = future.result()
+                eval_dataset.query_examples.append(q_example)
+                progress.update(1)
+
+    print("Prepared query examples.")
+
+    print("Preparing target examples...")
+
+    with ThreadPoolExecutor() as executor:
+        print("Preparing index examples...")
+        index_example_futures = {executor.submit(process_index_example, index_entry): index_entry for index_entry in index_entries}
+
+        with tqdm(total=len(index_entries), desc="Index examples") as progress:
+            for future in as_completed(index_example_futures):
+                index_example = future.result()
+                eval_dataset.index_examples.append(index_example)
+                progress.update(1)
+
+    # import pdb; pdb.set_trace()
+    print("Prepared index examples.")
+    return eval_dataset

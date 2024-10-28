@@ -18,8 +18,7 @@ from argparse import ArgumentParser
 import os
 import pickle
 from typing import Dict
-from data_utils import build_circo_dataset
-from data_utils import build_fiq_dataset
+from data_utils import build_circo_dataset, build_fiq_dataset, build_dtin_dataset
 from flax import serialization
 import jax
 import jax.numpy as jnp
@@ -67,7 +66,7 @@ if __name__ == "__main__":
       type=str,
       default="fiq-dress",
       help="Dataset selection.",
-      choices=["fiq-dress", "fiq-shirt", "fiq-toptee", "circo", "dtin"],
+      choices=["fiq-dress", "fiq-shirt", "fiq-toptee", "circo", "dtin-cartoon", "dtin-origami", "dtin-toy", "dtin-sculpture"],
   )
   parser.add_argument(
       "--output",
@@ -92,6 +91,10 @@ if __name__ == "__main__":
     )
   elif args.dataset in ["circo"]:
     eval_dataset = build_circo_dataset(
+        dataset_name=args.dataset, tokenizer=tokenizer
+    )
+  elif args.dataset in ["dtin-cartoon", "dtin-origami", "dtin-toy", "dtin-sculpture"]:
+    eval_dataset = build_dtin_dataset(
         dataset_name=args.dataset, tokenizer=tokenizer
     )
   else:
@@ -140,9 +143,15 @@ if __name__ == "__main__":
       q_example.retrieved_scores = top_k_scores[k]
       eval_dataset.query_examples[i + k] = q_example
   # Post-processing and evaluation:
+  # import pdb; pdb.set_trace()
   if args.dataset in ["fiq-dress", "fiq-shirt", "fiq-toptee"]:
     eval_dataset.evaluate_recall()
   elif args.dataset in ["circo"]:
+    eval_dataset.write_to_file(
+        os.path.join(args.output, args.dataset + "_" + args.model_size)
+    )
+  elif args.dataset in ["dtin-cartoon", "dtin-origami", "dtin-toy", "dtin-sculpture"]:
+    eval_dataset.evaluate_recall()
     eval_dataset.write_to_file(
         os.path.join(args.output, args.dataset + "_" + args.model_size)
     )

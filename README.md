@@ -49,6 +49,8 @@ cd .. # in main folder `magiclens`
 gsutil cp -R gs://gresearch/magiclens/models ./
 ```
 
+OR via [google drive](https://drive.google.com/drive/folders/1MXszMqIIh-yV7cYxWUxP7uHs9gfuTT3u)
+
 ### Data Preparation
 Please follow each dataset folder in `./data`. Currently we have successfully tested FIQ and CIRCO:
 
@@ -78,12 +80,19 @@ Add citation details here, usually a pastable BibTeX snippet:
 
 ```latex
 @inproceedings{zhang2024magiclens,
-  title={MagicLens: Self-Supervised Image Retrieval with Open-Ended Instructions},
-  author={Zhang, Kai and Luan, Yi and Hu, Hexiang and Lee, Kenton and Qiao, Siyuan and Chen, Wenhu and Su, Yu and Chang, Ming-Wei},
-  booktitle={The Forty-first International Conference on Machine Learning (ICML)},
-  year={2024},
-  pages={to appear}
+  title = 	 {{M}agic{L}ens: Self-Supervised Image Retrieval with Open-Ended Instructions},
+  author =       {Zhang, Kai and Luan, Yi and Hu, Hexiang and Lee, Kenton and Qiao, Siyuan and Chen, Wenhu and Su, Yu and Chang, Ming-Wei},
+  booktitle = 	 {Proceedings of the 41st International Conference on Machine Learning},
+  pages = 	 {59403--59420},
+  year = 	 {2024},
+  editor = 	 {Salakhutdinov, Ruslan and Kolter, Zico and Heller, Katherine and Weller, Adrian and Oliver, Nuria and Scarlett, Jonathan and Berkenkamp, Felix},
+  volume = 	 {235},
+  series = 	 {Proceedings of Machine Learning Research},
+  month = 	 {21--27 Jul},
+  publisher =    {PMLR},
+  url = 	 {https://proceedings.mlr.press/v235/zhang24an.html}
 }
+
 ```
 
 ## License and disclaimer
